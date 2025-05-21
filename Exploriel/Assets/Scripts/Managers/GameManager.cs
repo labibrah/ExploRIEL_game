@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Initialize player data or load from saved data
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("StartPage");
     }
 }
 // Add methods to save and load player data here
