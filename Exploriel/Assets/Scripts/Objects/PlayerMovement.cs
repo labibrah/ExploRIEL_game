@@ -22,7 +22,10 @@ public class PlayerMovement : MonoBehaviour
     public FloatValue currentHealth;
     public PlayerState currentState = PlayerState.walk;
     public Signal playerHealthSignal;
+    public Signal playerAttackSignal;
     public VectorValue StartingPosition;
+    public Inventory inventory;
+    public SpriteRenderer receiveItemSprite;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +39,10 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentState == PlayerState.attack || currentState == PlayerState.stagger || currentState == PlayerState.interact)
+        {
+            return; // If the player is attacking or staggered, do not process movement
+        }
         change = UnityEngine.Vector2.zero;
         change.x = Input.GetAxisRaw("Horizontal");
         change.y = Input.GetAxisRaw("Vertical");
@@ -48,6 +55,23 @@ public class PlayerMovement : MonoBehaviour
             UpdateAnimationAndMove();
         }
 
+
+    }
+
+    public void RaiseItem()
+    {
+        if (currentState != PlayerState.interact)
+        {
+            animator.SetBool("receive_item", true);
+            currentState = PlayerState.interact;
+            receiveItemSprite.sprite = inventory.currentItem.itemSprite;
+        }
+        else
+        {
+            animator.SetBool("receive_item", false);
+            currentState = PlayerState.walk;
+            receiveItemSprite.sprite = null; // Clear the sprite when not receiving an item
+        }
 
     }
 
@@ -71,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetBool("attacking", true);
         currentState = PlayerState.attack;
+        playerAttackSignal.Raise(); // Notify that the player is attacking
         yield return null;
         animator.SetBool("attacking", false);
         yield return new WaitForSeconds(0.5f); // Adjust the wait time as needed for the attack animation
@@ -79,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Knock(float knockbackDuration, float damage)
     {
-        currentHealth.runtimeValue -= damage; // Reduce the player's health by the damage amount
+        //currentHealth.runtimeValue -= damage; // Reduce the player's health by the damage amount
         if (currentHealth.runtimeValue <= 0)
         {
             this.gameObject.SetActive(false); // Deactivate the player if health is zero or below
@@ -93,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
     {
 
         currentState = PlayerState.stagger;
+        playerAttackSignal.Raise(); // Notify that the player is staggered
         yield return new WaitForSeconds(knockbackDuration); // Wait for the knockback duration
         currentState = PlayerState.walk; // Reset the player state to walk
         myRigidbody.velocity = UnityEngine.Vector2.zero; // Reset the velocity of the player

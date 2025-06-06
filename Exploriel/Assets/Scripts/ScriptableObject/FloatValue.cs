@@ -6,8 +6,8 @@ using UnityEngine;
 public class FloatValue : ScriptableObject, ISerializationCallbackReceiver
 {
     public float initialValue;
-    [HideInInspector]
     public float runtimeValue;
+    public float maxValue = 10f;
 
     public void OnBeforeSerialize()
     {

@@ -1,10 +1,8 @@
 using TMPro;
 using UnityEngine;
 
-public class Sign : MonoBehaviour
+public class Sign : Interactable
 {
-    public Signal contextOn;
-    public Signal contextOff;
     public GameObject dialogBox;
     public TextMeshProUGUI dialogText;
     public string dialog;
@@ -20,22 +18,22 @@ public class Sign : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public override void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !other.isTrigger)
         {
             dialogActive = true;
-            contextOn.Raise();
+            context.Raise();
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    public override void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !other.isTrigger)
         {
             dialogActive = false;
             dialogBox.SetActive(false);
-            contextOff.Raise();
+            context.Raise();
         }
     }
 }

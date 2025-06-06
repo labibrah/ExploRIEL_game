@@ -5,14 +5,11 @@ using UnityEngine;
 public class ContextClue : MonoBehaviour
 {
     public GameObject contextClue;
-    // Start is called before the first frame update
-    public void Enable()
-    {
-        contextClue.SetActive(true);
-    }
+    public bool contextClueActive = false;
 
-    public void Disable()
+    public void ToggleContextClue()
     {
-        contextClue.SetActive(false);
+        contextClueActive = !contextClueActive;
+        contextClue.SetActive(contextClueActive);
     }
 }
