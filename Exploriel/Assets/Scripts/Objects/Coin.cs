@@ -8,13 +8,18 @@ public class Coin : Supply
 
 
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public IEnumerator OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            if (audioSource != null && collectSound != null)
+            {
+                audioSource.PlayOneShot(collectSound);
+            }
             playerInventory.coins++;
             Debug.Log("Coin collected! Total coins: " + playerInventory.coins);
             supplySignal.Raise(); // Notify that the coin has been collected
+            yield return new WaitForSeconds(0.3f); // Optional delay for sound effect
             Destroy(gameObject); // Destroy the coin after collection
         }
         else

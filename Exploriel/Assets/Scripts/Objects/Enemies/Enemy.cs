@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EnemyState
 {
@@ -22,21 +23,27 @@ public class Enemy : MonoBehaviour
     public GameObject deathEffectPrefab;
     public Rigidbody2D rb;
     public Transform target;
+    public GameObject player;
     public float chaseRaidus;
     public float attackRadius;
     public Transform homePosition;
     public Animator Animation;
+    public Slider healthBar; // Reference to the health bar UI element
+    public bool isFighting; // Flag to indicate if the enemy is in a fight
     // Start is called before the first frame update
     void Start()
     {
         currentState = EnemyState.Idle;
         target = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
         Animation = GetComponent<Animator>();
-        if (Animation != null)
+        if (Animation != null || isFighting)
         {
             Animation.SetBool("wakeUp", true);
         }
+        healthBar.maxValue = maxHealth.initialValue; // Set the maximum value of the health bar
+        healthBar.value = maxHealth.initialValue; // Initialize the health bar to the maximum value
     }
 
     private void Awake()
@@ -61,12 +68,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void takeDamage(float damage)
+    public void takeDamage(float damage)
     {
         health -= damage; // Reduce health by the damage amount
+        if (!healthBar.gameObject.activeInHierarchy)
+        {
+            healthBar.gameObject.SetActive(true); // Ensure the health bar is active
+        }
+        health = Mathf.Clamp(health, 0, maxHealth.initialValue); // Ensure health does not go below zero
+        healthBar.value = health; // Update the health bar UI
+        Debug.Log($"{enemyName} took {damage} damage. Remaining health: {health}");
         if (health <= 0)
         {
             DeathEffect(); // Trigger death effect
+            healthBar.gameObject.SetActive(false); // Hide the health bar
             this.gameObject.SetActive(false); // Deactivate the enemy if health is zero or below
         }
     }

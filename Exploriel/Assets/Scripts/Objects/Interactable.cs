@@ -6,6 +6,16 @@ public class Interactable : MonoBehaviour
 {
     public bool playerInRange;
     public Signal context;
+    public AudioSource audioSource;
+    public AudioClip interactSound;
+
+    public virtual void Start()
+    {
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+    }
 
     public virtual void OnTriggerEnter2D(Collider2D other)
     {

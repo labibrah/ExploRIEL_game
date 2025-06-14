@@ -200,8 +200,10 @@ MonoBehaviour:
   enemyName: Log
   baseAttack: 1
   moveSpeed: 1
+  deathEffectPrefab: {fileID: 0}
+  rb: {fileID: 0}
   target: {fileID: 0}
-  chaseRaidus: 10
+  chaseRaidus: 3
   attackRadius: 1
   homePosition: {fileID: 0}
   Animation: {fileID: 0}

@@ -12,6 +12,10 @@ public class Sign : Interactable
     {
         if (dialogActive && Input.GetKeyDown(KeyCode.E))
         {
+            if (audioSource != null && interactSound != null)
+            {
+                audioSource.PlayOneShot(interactSound);
+            }
             dialogBox.SetActive(!dialogBox.activeSelf);
             dialogText.text = dialog;
         }

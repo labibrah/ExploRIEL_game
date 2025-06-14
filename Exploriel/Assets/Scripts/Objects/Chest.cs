@@ -15,9 +15,13 @@ public class Chest : Interactable
     public Animator animator;
     public Inventory inventory;
 
-    void Start()
+    public override void Start()
     {
         animator = GetComponent<Animator>();
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
         if (storedOpenState != null)
         {
             isOpen = storedOpenState.runtimeValue;
@@ -48,6 +52,10 @@ public class Chest : Interactable
     public IEnumerator OpenChest()
     {
         isOpen = true;
+        if (audioSource != null && interactSound != null)
+        {
+            audioSource.PlayOneShot(interactSound);
+        }
         storedOpenState.runtimeValue = isOpen;
         animator.SetBool("isOpen", true);
         dialogBox.SetActive(true);

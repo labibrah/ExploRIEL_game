@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public VectorValue StartingPosition;
     public Inventory inventory;
     public SpriteRenderer receiveItemSprite;
+    public bool isFighting; // Flag to indicate if the player is in a fight
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentState == PlayerState.attack || currentState == PlayerState.stagger || currentState == PlayerState.interact)
+        if (currentState == PlayerState.attack || currentState == PlayerState.stagger || currentState == PlayerState.interact || isFighting)
         {
             return; // If the player is attacking or staggered, do not process movement
         }
@@ -122,5 +123,16 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(knockbackDuration); // Wait for the knockback duration
         currentState = PlayerState.walk; // Reset the player state to walk
         myRigidbody.velocity = UnityEngine.Vector2.zero; // Reset the velocity of the player
+    }
+
+    public void takeDamage(float damage)
+    {
+        currentHealth.runtimeValue -= damage; // Reduce the player's health by the damage amount
+        playerHealthSignal.Raise(); // Notify that the player's health has changed
+        if (currentHealth.runtimeValue <= 0)
+        {
+            //DeathEffect(); // Trigger death effect
+            this.gameObject.SetActive(false); // Deactivate the player if health is zero or below
+        }
     }
 }

@@ -9,7 +9,7 @@ public class MainMenuUI : MonoBehaviour
     {
         // Load the world 1 scene
         Debug.Log("Loading World 1...");
-        //SceneManager.LoadScene("World1");
+        SceneManager.LoadScene("HouseInterior");
     }
 
     public void LoadWorld2()

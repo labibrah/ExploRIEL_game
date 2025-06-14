@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Log : Enemy
 {
@@ -29,13 +30,15 @@ public class Log : Enemy
         }
         else if (distance <= attackRadius)
         {
-            //AttackTarget();
-            //Debug.Log("Attacking the target");
+            StartFighting();
         }
         else
         {
             ChangeState(EnemyState.Idle);
-            Animation.SetBool("wakeUp", false);
+            if (!isFighting)
+            {
+                Animation.SetBool("wakeUp", false);
+            }
         }
     }
 
@@ -76,5 +79,11 @@ public class Log : Enemy
             SetAnimFloat(Vector2.zero);
         }
 
+    }
+
+    public void StartFighting()
+    {
+        player.GetComponent<PlayerMovement>().StartingPosition.initialValue = target.position;
+        SceneManager.LoadScene("FightingLog");
     }
 }
