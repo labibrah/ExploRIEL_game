@@ -15,7 +15,7 @@ public class HeartManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetHeart((int)heartContainers.initialValue);
+        SetHeart((int)heartContainers.runtimeValue);
     }
 
     public void SetHeart(int heartCount)
@@ -28,6 +28,7 @@ public class HeartManager : MonoBehaviour
                 if (heartCount % 2 == 0 || i < heartCount - 1)
                 {
                     hearts[i].sprite = fullHeart; // Full heart for even counts or all but the last heart
+                    i++;
                 }
                 else
                 {

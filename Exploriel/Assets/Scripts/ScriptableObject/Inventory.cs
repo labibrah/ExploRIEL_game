@@ -2,32 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+[CreateAssetMenu(menuName = "ScriptableObjects/Inventory")]
 public class Inventory : ScriptableObject, ISerializationCallbackReceiver
 {
     public Item currentItem;
     public List<Item> items = new List<Item>();
     public int coins;
 
-    public void OnBeforeSerialize()
+#if UNITY_EDITOR
+    [InitializeOnLoadMethod]
+    private static void RegisterInventoryResetOnPlayMode()
     {
-        // This method is called before serialization, you can add any pre-serialization logic here if needed.
+        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
     }
 
-    public void OnAfterDeserialize()
+    private static void OnPlayModeStateChanged(PlayModeStateChange state)
     {
-        // This method is called after deserialization, you can add any post-deserialization logic here if needed.
-        // Clear inventory on game start
+        if (state == PlayModeStateChange.EnteredPlayMode)
+        {
+            string[] guids = AssetDatabase.FindAssets("t:Inventory");
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                Inventory asset = AssetDatabase.LoadAssetAtPath<Inventory>(path);
+                if (asset != null)
+                {
+                    asset.ResetInventory();
+                    EditorUtility.SetDirty(asset); // Update in Inspector if needed
+                }
+            }
+        }
+    }
+#endif
+
+    public void ResetInventory()
+    {
         items.Clear();
         currentItem = null;
         coins = 0;
     }
+
     public void AddItem(Item item)
     {
         if (item != null && !items.Contains(item))
         {
             items.Add(item);
-            currentItem = item; // Set the current item to the newly added item
+            currentItem = item;
             Debug.Log("Added item: " + item.itemName);
         }
         else
@@ -36,8 +60,15 @@ public class Inventory : ScriptableObject, ISerializationCallbackReceiver
         }
     }
 
-    public bool hasItem(Item item)
+    public bool HasItem(Item item)
     {
         return items.Contains(item);
+    }
+
+    public void OnBeforeSerialize() { }
+
+    public void OnAfterDeserialize()
+    {
+        // No need to reset here — we now reset only when entering Play Mode
     }
 }

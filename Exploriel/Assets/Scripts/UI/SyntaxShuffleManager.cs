@@ -25,6 +25,42 @@ public class SyntaxShuffleManager : MonoBehaviour
         LoadSentence("I want to eat pizza");
     }
 
+    void Update()
+    {
+        if (timerRunning && !answered)
+        {
+            timeRemaining -= Time.deltaTime;
+            timerText.text = $"Time Remaining: {timeRemaining:F1}"; // Update timer UI
+
+            // Color changes
+            if (timeRemaining > duration * 0.6f)
+                timerText.color = Color.green;
+            else if (timeRemaining > duration * 0.3f)
+                timerText.color = Color.yellow;
+            else
+                timerText.color = Color.red;
+
+            // Optional: Pulse or flash when under 3 seconds
+            if (timeRemaining < 3f)
+            {
+                float scale = 1.1f + Mathf.PingPong(Time.time * 5f, 0.2f); // subtle pulse
+                timerText.transform.localScale = new Vector3(scale, scale, 1f);
+            }
+            else
+            {
+                timerText.transform.localScale = Vector3.one;
+            }
+
+            if (timeRemaining <= 0)
+            {
+                Debug.Log("Time's up!");
+                timerRunning = false;
+                timerText.gameObject.SetActive(false);
+                battleManager.OnPlayerSubmitted(false, 0f);
+            }
+        }
+    }
+
     public void LoadSentence(string sentence)
     {
         answered = false; // Reset answered state for new challenge
@@ -76,7 +112,7 @@ public class SyntaxShuffleManager : MonoBehaviour
         answered = true;
 
         bool correct = CheckAnswer();
-        battleManager.OnPlayerSubmitted(correct);
+        battleManager.OnPlayerSubmitted(correct, timeRemaining);
     }
 
     private bool CheckAnswer()
@@ -105,46 +141,10 @@ public class SyntaxShuffleManager : MonoBehaviour
         battleManager = bm;
         LoadSentence("I want to eat pizza"); // Load random or level-based
         timerText.gameObject.SetActive(true);
-        StartCoroutine(StartTimer());
+        timerRunning = true;
+        timeRemaining = duration; // Reset timer
 
     }
 
 
-    private IEnumerator StartTimer()
-    {
-        timeRemaining = duration;
-
-        while (timeRemaining > 0 && !answered)
-        {
-            yield return null;
-            timeRemaining -= Time.deltaTime;
-            timerText.text = $"Time Remaining: {timeRemaining:F1}"; // Update timer UI
-
-            // Color changes
-            if (timeRemaining > duration * 0.6f)
-                timerText.color = Color.green;
-            else if (timeRemaining > duration * 0.3f)
-                timerText.color = Color.yellow;
-            else
-                timerText.color = Color.red;
-
-            // Optional: Pulse or flash when under 3 seconds
-            if (timeRemaining < 3f)
-            {
-                float scale = 1.1f + Mathf.PingPong(Time.time * 5f, 0.2f); // subtle pulse
-                timerText.transform.localScale = new Vector3(scale, scale, 1f);
-            }
-            else
-            {
-                timerText.transform.localScale = Vector3.one;
-            }
-        }
-
-        if (!answered)
-        {
-            Debug.Log("Time's up!");
-            timerText.gameObject.SetActive(false);
-            battleManager.OnPlayerSubmitted(false);
-        }
-    }
 }

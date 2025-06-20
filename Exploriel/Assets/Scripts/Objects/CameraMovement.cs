@@ -10,6 +10,7 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        target = GameObject.FindGameObjectWithTag("Player").transform; // Find the player by tag
         transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
         cameraAnimator = GetComponent<Animator>();
     }
@@ -34,5 +35,17 @@ public class CameraMovement : MonoBehaviour
         cameraAnimator.SetBool("KickActive", true);
         yield return new WaitForSeconds(0.1f);
         cameraAnimator.SetBool("KickActive", false);
+    }
+
+    private IEnumerator PayAttentionToThings(GameObject thing)
+    {
+        target = thing.transform; // Change the target to the specified thing
+        yield return new WaitForSeconds(2f);
+        target = GameObject.FindGameObjectWithTag("Player").transform; // Reset target back to player after 2 seconds
+    }
+
+    public void PayAttentionTo(GameObject thing)
+    {
+        StartCoroutine(PayAttentionToThings(thing));
     }
 }

@@ -63,6 +63,7 @@ public class Chest : Interactable
         inventory.AddItem(contents);
         raiseItemSignal.Raise();
         context.Raise();
+        interactSignal.Raise();
         yield return new WaitForSeconds(2f);
         context.Raise();
         dialogBox.SetActive(false);

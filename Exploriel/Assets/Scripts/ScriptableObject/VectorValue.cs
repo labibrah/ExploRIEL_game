@@ -2,25 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [CreateAssetMenu(fileName = "VectorValue", menuName = "ScriptableObjects/VectorValue", order = 1)]
-public class VectorValue : ScriptableObject, ISerializationCallbackReceiver
+public class VectorValue : ScriptableObject
 {
     public Vector2 initialValue;
-    public Vector2 value;
+    public Vector2 runtimeValue;
 
-    private void OnEnable()
+#if UNITY_EDITOR
+    [InitializeOnLoadMethod]
+    private static void RegisterPlayModeReset()
     {
-        initialValue = value; // Initialize initialValue with the current value
+        EditorApplication.playModeStateChanged += ResetOnEnterPlayMode;
     }
 
-    public void OnBeforeSerialize()
+    private static void ResetOnEnterPlayMode(PlayModeStateChange state)
     {
-        // Implement any logic before serialization if needed
+        if (state == PlayModeStateChange.EnteredPlayMode)
+        {
+            string[] guids = AssetDatabase.FindAssets("t:VectorValue");
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                VectorValue asset = AssetDatabase.LoadAssetAtPath<VectorValue>(path);
+                if (asset != null)
+                {
+                    asset.runtimeValue = asset.initialValue;
+                    EditorUtility.SetDirty(asset); // Optional: updates inspector
+                }
+            }
+        }
     }
-
-    public void OnAfterDeserialize()
-    {
-        // Reset value to initialValue after deserialization
-        value = initialValue;
-    }
+#endif
 }

@@ -8,6 +8,7 @@ public class Interactable : MonoBehaviour
     public Signal context;
     public AudioSource audioSource;
     public AudioClip interactSound;
+    public Signal interactSignal;
 
     public virtual void Start()
     {
@@ -32,6 +33,19 @@ public class Interactable : MonoBehaviour
         {
             playerInRange = false;
             context.Raise();
+        }
+    }
+
+    public virtual void Interact()
+    {
+        if (audioSource != null && interactSound != null)
+        {
+            audioSource.PlayOneShot(interactSound);
+        }
+
+        if (interactSignal != null)
+        {
+            interactSignal.Raise();
         }
     }
 }

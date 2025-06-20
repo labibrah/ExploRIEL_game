@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: TwoHitEnemyHealth
   m_EditorClassIdentifier: 
   initialValue: 2
+  runtimeValue: 2
+  maxValue: 10

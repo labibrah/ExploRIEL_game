@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum DoorType
@@ -19,12 +20,37 @@ public class Door : Interactable
     public SpriteRenderer doorSpriteRenderer;
     public BoxCollider2D doorCollider;
     public Item requiredKey;
+    public BoolValue Opened;
+    public Sprite OpenedSprite;
+    public Sprite ClosedSprite;
 
-    private void Start()
+    public override void Start()
     {
         doorSpriteRenderer = GetComponent<SpriteRenderer>();
-        doorCollider = GetComponent<BoxCollider2D>();
-        isOpen = false;
+        // Get the BoxCollider2D that is not set as trigger
+        BoxCollider2D[] colliders = GetComponents<BoxCollider2D>();
+        foreach (var col in colliders)
+        {
+            if (!col.isTrigger)
+            {
+                doorCollider = col;
+                break;
+            }
+        }
+        audioSource = GetComponent<AudioSource>();
+        isOpen = Opened.runtimeValue;
+
+        // Set the initial sprite based on the door's state
+        if (isOpen)
+        {
+            doorSpriteRenderer.sprite = OpenedSprite;
+            doorCollider.enabled = false; // Disable collider when the door is open
+        }
+        else
+        {
+            doorSpriteRenderer.sprite = ClosedSprite;
+            doorCollider.enabled = true; // Enable collider when the door is closed
+        }
 
         // Set initial state based on door type
         switch (doorType)
@@ -71,8 +97,17 @@ public class Door : Interactable
         if (!isOpen)
         {
             isOpen = true;
-            doorSpriteRenderer.enabled = false; // Hide the door sprite
+            Opened.runtimeValue = true; // Update the opened state
+            doorSpriteRenderer.sprite = OpenedSprite; // Change to opened sprite
             doorCollider.enabled = false; // Disable the collider to allow passage
+            if (audioSource != null && interactSound != null)
+            {
+                audioSource.PlayOneShot(interactSound); // Play the interaction sound
+            }
+            if (interactSignal != null)
+            {
+                interactSignal.Raise(); // Raise the interaction signal
+            }
             Debug.Log("Door opened.");
         }
     }
@@ -80,6 +115,6 @@ public class Door : Interactable
     private bool HasRequiredKey()
     {
         // Check if the player has the required key in their inventory
-        return playerInventory.hasItem(requiredKey);
+        return playerInventory.HasItem(requiredKey);
     }
 }

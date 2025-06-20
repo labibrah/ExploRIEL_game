@@ -5,9 +5,9 @@ public class Sign : Interactable
 {
     public GameObject dialogBox;
     public TextMeshProUGUI dialogText;
-    public string dialog;
+    public string[] dialogs;
     public bool dialogActive;
-
+    private int currentDialogIndex = 0;
     void Update()
     {
         if (dialogActive && Input.GetKeyDown(KeyCode.E))
@@ -16,17 +16,55 @@ public class Sign : Interactable
             {
                 audioSource.PlayOneShot(interactSound);
             }
-            dialogBox.SetActive(!dialogBox.activeSelf);
-            dialogText.text = dialog;
-        }
 
+            if (!dialogBox.activeSelf)
+            {
+                dialogBox.SetActive(true);
+                currentDialogIndex = 0;
+                dialogText.text = dialogs.Length > 0 ? dialogs[currentDialogIndex] : "";
+            }
+            else
+            {
+                currentDialogIndex++;
+                if (currentDialogIndex < dialogs.Length)
+                {
+                    dialogText.text = dialogs[currentDialogIndex];
+                }
+                else
+                {
+                    dialogBox.SetActive(false);
+                    dialogActive = false;
+                    currentDialogIndex = 0;
+                }
+            }
+        }
+        else if (dialogActive && Input.GetKeyDown(KeyCode.Escape))
+        {
+            dialogBox.SetActive(false);
+            dialogActive = false;
+            currentDialogIndex = 0;
+        }
+        else if (dialogActive && Input.GetKeyDown(KeyCode.Space))
+        {
+            dialogBox.SetActive(false);
+            dialogActive = false;
+            currentDialogIndex = 0;
+        }
+        else if (dialogActive && Input.GetKeyDown(KeyCode.Return))
+        {
+            dialogBox.SetActive(false);
+            dialogActive = false;
+            currentDialogIndex = 0;
+        }
     }
+
 
     public override void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !other.isTrigger)
         {
             dialogActive = true;
+            currentDialogIndex = 0;
             context.Raise();
         }
     }
@@ -38,6 +76,9 @@ public class Sign : Interactable
             dialogActive = false;
             dialogBox.SetActive(false);
             context.Raise();
+            currentDialogIndex = 0;
         }
     }
+
 }
+

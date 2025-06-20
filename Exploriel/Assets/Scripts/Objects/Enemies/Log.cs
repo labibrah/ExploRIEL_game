@@ -31,14 +31,13 @@ public class Log : Enemy
         else if (distance <= attackRadius)
         {
             StartFighting();
+
+
         }
         else
         {
             ChangeState(EnemyState.Idle);
-            if (!isFighting)
-            {
-                Animation.SetBool("wakeUp", false);
-            }
+            Animation.SetBool("wakeUp", false);
         }
     }
 
@@ -83,7 +82,7 @@ public class Log : Enemy
 
     public void StartFighting()
     {
-        player.GetComponent<PlayerMovement>().StartingPosition.initialValue = target.position;
+        player.GetComponent<PlayerExploring>().StartingPosition.runtimeValue = target.position;
         SceneManager.LoadScene("FightingLog");
     }
 }

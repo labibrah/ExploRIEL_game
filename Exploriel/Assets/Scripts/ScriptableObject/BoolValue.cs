@@ -2,37 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class BoolValue : ScriptableObject, ISerializationCallbackReceiver
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.Callbacks;
+#endif
+
+[CreateAssetMenu(menuName = "Values/BoolValue")]
+public class BoolValue : ScriptableObject
 {
     public bool initialValue;
     public bool runtimeValue;
 
-    // Method to reset the runtime value to the initial value
-    public void Reset()
+#if UNITY_EDITOR
+    // Register the callback once when Unity loads
+    [InitializeOnLoadMethod]
+    private static void InitOnLoad()
     {
-        runtimeValue = initialValue;
+        EditorApplication.playModeStateChanged += ResetAllOnEnterPlayMode;
     }
 
-    // Method to set the runtime value
+    private static void ResetAllOnEnterPlayMode(PlayModeStateChange state)
+    {
+        // Only reset when entering Play Mode (not scene reloads)
+        if (state == PlayModeStateChange.EnteredPlayMode)
+        {
+            string[] guids = AssetDatabase.FindAssets("t:BoolValue");
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                BoolValue asset = AssetDatabase.LoadAssetAtPath<BoolValue>(path);
+                if (asset != null)
+                {
+                    asset.runtimeValue = asset.initialValue;
+
+                    // Mark dirty so it updates in Inspector
+                    EditorUtility.SetDirty(asset);
+                }
+            }
+        }
+    }
+#endif
+
     public void SetValue(bool value)
     {
         runtimeValue = value;
     }
 
-    // Method to get the current runtime value
     public bool GetValue()
     {
         return runtimeValue;
-    }
-
-    public void OnBeforeSerialize()
-    {
-        // This method is called before serialization, can be used to prepare data if needed
-    }
-    public void OnAfterDeserialize()
-    {
-        // This method is called after deserialization, can be used to reset or validate data
-        runtimeValue = initialValue; // Reset runtime value to initial value after deserialization
     }
 }
