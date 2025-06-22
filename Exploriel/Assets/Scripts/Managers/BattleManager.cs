@@ -205,7 +205,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // Load the world1 scene
-        SceneManager.LoadScene("world1");
+        SceneTracker.Instance.ReturnToPreviousScene();
     }
 
     public IEnumerator ShowTextWithDelay(string message, float delay)

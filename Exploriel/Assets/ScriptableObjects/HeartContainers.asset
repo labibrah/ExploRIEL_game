@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: HeartContainers
   m_EditorClassIdentifier: 
   initialValue: 3
-  runtimeValue: 4
+  runtimeValue: 3
   maxValue: 10

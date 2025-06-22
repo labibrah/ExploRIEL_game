@@ -27,8 +27,9 @@ public class Enemy : MonoBehaviour
     public Transform homePosition;
     public Animator Animation;
     public BoolValue isDead;
+    public string SceneToFight;
 
-    void Start()
+    public virtual void Start()
     {
         if (isDead.runtimeValue)
         {

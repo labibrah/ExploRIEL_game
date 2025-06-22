@@ -7,8 +7,8 @@ public class Sign : Interactable
     public TextMeshProUGUI dialogText;
     public string[] dialogs;
     public bool dialogActive;
-    private int currentDialogIndex = 0;
-    void Update()
+    public int currentDialogIndex = 0;
+    public virtual void Update()
     {
         if (dialogActive && Input.GetKeyDown(KeyCode.E))
         {

@@ -48,7 +48,7 @@ public class Inventory : ScriptableObject, ISerializationCallbackReceiver
 
     public void AddItem(Item item)
     {
-        if (item != null && !items.Contains(item))
+        if (item != null)
         {
             items.Add(item);
             currentItem = item;
@@ -70,5 +70,18 @@ public class Inventory : ScriptableObject, ISerializationCallbackReceiver
     public void OnAfterDeserialize()
     {
         // No need to reset here — we now reset only when entering Play Mode
+    }
+
+    public int GetItemCount(Item item)
+    {
+        int count = 0;
+        foreach (var i in items)
+        {
+            if (i == item)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 }

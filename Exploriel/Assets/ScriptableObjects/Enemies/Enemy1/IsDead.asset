@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: IsDead
   m_EditorClassIdentifier: 
   initialValue: 0
-  runtimeValue: 1
+  runtimeValue: 0

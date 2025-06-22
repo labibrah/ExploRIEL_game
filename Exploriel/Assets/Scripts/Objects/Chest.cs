@@ -31,6 +31,25 @@ public class Chest : Interactable
         {
             Debug.LogWarning("Stored Open State is not assigned in Chest.");
         }
+
+        if (dialogBox == null)
+        {
+            // Find the Canvas in the scene
+            Canvas canvas = FindObjectOfType<Canvas>();
+            if (canvas != null)
+            {
+                // Find the inactive dialogBox by name or type in the Canvas hierarchy
+                dialogBox = canvas.transform.Find("DialogBox")?.gameObject;
+            }
+        }
+
+        if (dialogText == null)
+        {
+            if (dialogBox != null)
+            {
+                dialogText = dialogBox.GetComponentInChildren<TextMeshProUGUI>(true);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -49,7 +68,7 @@ public class Chest : Interactable
         }
     }
 
-    public IEnumerator OpenChest()
+    public virtual IEnumerator OpenChest()
     {
         isOpen = true;
         if (audioSource != null && interactSound != null)
