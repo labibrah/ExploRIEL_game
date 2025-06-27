@@ -18,11 +18,11 @@ public class CameraMovement : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (transform.position != target.position)
-        {
-            Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime);
-        }
+        Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
+        float distance = Vector3.Distance(transform.position, targetPosition);
+        // The farther the camera is, the faster it moves (speed scales with distance)
+        float dynamicSmoothing = smoothing * distance;
+        transform.position = Vector3.Lerp(transform.position, targetPosition, dynamicSmoothing * Time.deltaTime);
     }
 
     public void DoScreenKick()

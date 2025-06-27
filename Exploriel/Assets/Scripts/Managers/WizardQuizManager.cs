@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class WizardQuizManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class WizardQuizManager : MonoBehaviour
     public Transform trueZoneSpawnPoint;   // up
     public Transform falseZoneSpawnPoint;  // down
     public BoxCollider2D quizTrigger; // optional reference to trigger the quiz
+    public GameObject SceneTransitionPrefab; // optional reference to scene transition
+    public Transform player;
 
     private int currentQuestionIndex = 0;
     private int correctAnswers = 0;
@@ -28,6 +31,7 @@ public class WizardQuizManager : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         quizTrigger = GetComponent<BoxCollider2D>();
         quizTrigger.enabled = false; // disable the trigger until the quiz starts
     }
@@ -113,7 +117,9 @@ public class WizardQuizManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Quiz finished.");
+            Debug.Log("It seems you need more practice.");
+            Instantiate(SceneTransitionPrefab, player.position, Quaternion.identity);
+
         }
     }
 

@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5949332793250904580}
   - component: {fileID: 1183890160424551572}
   - component: {fileID: 4709179062604300829}
-  - component: {fileID: 6493170501492032728}
   m_Layer: 0
   m_Name: WalkingLog
   m_TagString: Enemy
@@ -200,11 +199,17 @@ MonoBehaviour:
   enemyName: Log
   baseAttack: 1
   moveSpeed: 1
+  deathEffectPrefab: {fileID: 0}
+  rb: {fileID: 0}
   target: {fileID: 0}
+  player: {fileID: 0}
   chaseRaidus: 10
   attackRadius: 1
   homePosition: {fileID: 0}
   Animation: {fileID: 0}
+  isDead: {fileID: 0}
+  SceneToFight: 
+  enemyNameText: {fileID: 0}
 --- !u!61 &4709179062604300829
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -250,18 +255,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7641723, y: 1.0445211}
   m_EdgeRadius: 0
---- !u!114 &6493170501492032728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 136004381501029900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a39457b3d682244f923ae020949c26d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  knockbackForce: 200
-  knockbackDuration: 0.5
-  damage: 1

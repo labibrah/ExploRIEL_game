@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public enum EnemyState
 {
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour
     public Animator Animation;
     public BoolValue isDead;
     public string SceneToFight;
+    public TextMeshProUGUI enemyNameText;
 
     public virtual void Start()
     {
@@ -44,6 +46,10 @@ public class Enemy : MonoBehaviour
         if (Animation != null)
         {
             Animation.SetBool("wakeUp", true);
+        }
+        if (enemyNameText != null)
+        {
+            enemyNameText.text = enemyName; // Set the enemy name in the UI
         }
     }
 

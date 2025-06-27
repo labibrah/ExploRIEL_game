@@ -311,7 +311,7 @@ MonoBehaviour:
   playerInRange: 0
   context: {fileID: 11400000, guid: d34fcd4961c36a34cbd61c6313562265, type: 2}
   audioSource: {fileID: 0}
-  interactSound: {fileID: 0}
+  interactSound: {fileID: 8300000, guid: 912995446fdc5ef48a9b746c9a835492, type: 3}
   interactSignal: {fileID: 11400000, guid: 60c953f9833aae2428893bcc08c96d66, type: 2}
   contents: {fileID: 11400000, guid: 4715d6fc228f960469746982e9367ebb, type: 2}
   isOpen: 0

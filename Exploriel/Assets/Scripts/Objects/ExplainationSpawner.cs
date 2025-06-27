@@ -10,6 +10,8 @@ public class ExplainationSpawner : MonoBehaviour
     public Signal ExplanationRead;
     public bool explanationShown = false;
     public string explanationText;
+    public AudioSource audioSource;
+    public AudioClip explanationAudio;
 
     void Start()
     {
@@ -36,6 +38,10 @@ public class ExplainationSpawner : MonoBehaviour
         {
             ExplanationRead = GetComponent<Signal>();
         }
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     void Update()
@@ -52,6 +58,10 @@ public class ExplainationSpawner : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            if (audioSource != null && explanationAudio != null)
+            {
+                audioSource.PlayOneShot(explanationAudio);
+            }
             if (dialogBox != null && dialogText != null)
             {
                 dialogBox.SetActive(true);

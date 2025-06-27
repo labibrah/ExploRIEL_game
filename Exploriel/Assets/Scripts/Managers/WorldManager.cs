@@ -35,7 +35,8 @@ public class WorldManager : MonoBehaviour
         GameObject door = regionDoors[regionIndex];
         if (door != null)
         {
-            door.GetComponent<SpriteRenderer>().enabled = false; // Hide the door
+            //door.GetComponent<SpriteRenderer>().enabled = false; // Hide the door
+            door.GetComponent<Animator>().SetBool("isOpen", true); // Trigger the open animation
             door.GetComponent<Collider2D>().enabled = false; // Disable the collider
             regionDoorStates[regionIndex].SetValue(true); // Update the state to open
             if (regionDoorSignal != null)

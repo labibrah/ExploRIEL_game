@@ -17,6 +17,9 @@ public class SceneTransition : MonoBehaviour
     public Sprite portalInactiveSprite;
     public AudioClip portalSound;
     private AudioSource audioSource;
+    public List<BoolValue> activateConditions;
+    public Animator portalAnimator;
+    public Camera camera;
 
     private void Awake()
     {
@@ -30,11 +33,20 @@ public class SceneTransition : MonoBehaviour
         {
             portalSpriteRenderer = GetComponent<SpriteRenderer>();
         }
+        if (portalAnimator == null)
+        {
+            portalAnimator = GetComponent<Animator>();
+        }
+        if (camera == null)
+        {
+            camera = FindObjectOfType<Camera>();
+        }
 
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Collision detected with: " + collision.name);
         if (collision.CompareTag("Player") && !collision.isTrigger)
         {
             playerStorage.runtimeValue = playerPosition;
@@ -50,6 +62,7 @@ public class SceneTransition : MonoBehaviour
             yield return new WaitForSeconds(fadeDuration);
         }
 
+        Debug.Log("Loading scene: " + sceneToLoad);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneToLoad);
 
         while (!asyncLoad.isDone)
@@ -65,7 +78,6 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator PortalActivated()
     {
-
         if (audioSource != null && portalSound != null)
         {
             audioSource.PlayOneShot(portalSound);
@@ -77,12 +89,47 @@ public class SceneTransition : MonoBehaviour
         {
             portalSpriteRenderer.sprite = portalActiveSprite;
         }
-
-        Collider2D collider = GetComponent<Collider2D>();
-        if (collider != null && !collider.isTrigger)
+        camera.GetComponent<CameraMovement>().PayAttentionTo(gameObject);
+        if (portalAnimator != null)
         {
-            collider.enabled = false;
+            portalAnimator.SetBool("isActivated", true);
         }
 
+        // Disable the collider that is NOT a trigger
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (var col in colliders)
+        {
+            if (!col.isTrigger)
+            {
+                col.enabled = false;
+            }
+        }
+    }
+
+    public void CheckConditions()
+    {
+        bool allConditionsMet = true;
+
+        foreach (BoolValue condition in activateConditions)
+        {
+            if (!condition.runtimeValue)
+            {
+                allConditionsMet = false;
+                Debug.Log($"Condition {condition.name} not met.");
+                break;
+            }
+        }
+
+        if (allConditionsMet)
+        {
+            Activated();
+        }
+        else
+        {
+            if (portalSpriteRenderer != null)
+            {
+                portalSpriteRenderer.sprite = portalInactiveSprite;
+            }
+        }
     }
 }

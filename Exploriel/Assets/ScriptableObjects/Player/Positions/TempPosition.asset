@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e943d679e05f3438d87615f7f2449f, type: 3}
   m_Name: TempPosition
   m_EditorClassIdentifier: 
-  initialValue: {x: 90, y: 0}
-  runtimeValue: {x: 90, y: 0}
+  initialValue: {x: 127, y: 0}
+  runtimeValue: {x: 127, y: 0}

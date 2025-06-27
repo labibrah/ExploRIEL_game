@@ -135,6 +135,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: dc03cc7b8bed3a74b871db4a8a87cf6c, type: 2}
     - target: {fileID: 4016849120603655115, guid: 14058a80e1f28fd4587b6de99319cf8e, type: 3}
+      propertyPath: enemyName
+      value: LogInDungeon
+      objectReference: {fileID: 0}
+    - target: {fileID: 4016849120603655115, guid: 14058a80e1f28fd4587b6de99319cf8e, type: 3}
       propertyPath: SceneToFight
       value: FightingLog3
       objectReference: {fileID: 0}
@@ -185,6 +189,10 @@ PrefabInstance:
     - target: {fileID: 6219525599835354110, guid: 14058a80e1f28fd4587b6de99319cf8e, type: 3}
       propertyPath: m_Name
       value: Log
+      objectReference: {fileID: 0}
+    - target: {fileID: 6219525599835354110, guid: 14058a80e1f28fd4587b6de99319cf8e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8510986268895817840, guid: 14058a80e1f28fd4587b6de99319cf8e, type: 3}
@@ -1046,7 +1054,7 @@ PrefabInstance:
     - target: {fileID: 4337185287134595853, guid: 7b9e8b0159a6761468419bd5cd0670bb, type: 3}
       propertyPath: portalActiveSprite
       value: 
-      objectReference: {fileID: -666996087, guid: 1bfbfda97f8b0ca4bac1849b54a8d2a5, type: 3}
+      objectReference: {fileID: 909212720, guid: b5f1ae5ea2da2754f9ee40f572977a63, type: 3}
     - target: {fileID: 4432837458402674273, guid: 7b9e8b0159a6761468419bd5cd0670bb, type: 3}
       propertyPath: m_Name
       value: SceneTransition
@@ -1112,6 +1120,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4432837458402674273, guid: 7b9e8b0159a6761468419bd5cd0670bb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1573014878}
+    - targetCorrespondingSourceObject: {fileID: 4432837458402674273, guid: 7b9e8b0159a6761468419bd5cd0670bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1573014882}
   m_SourcePrefab: {fileID: 100100000, guid: 7b9e8b0159a6761468419bd5cd0670bb, type: 3}
 --- !u!1 &1573014871 stripped
 GameObject:
@@ -1154,8 +1165,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.34, y: 1.52}
-    newSize: {x: 1.34, y: 1.52}
+    oldSize: {x: 0.81, y: 0.66}
+    newSize: {x: 0.85, y: 0.66}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -1298,6 +1309,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &1573014882
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573014871}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e3ad7317799b7464fa41004ebb7f08fe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1584100611
 GameObject:
   m_ObjectHideFlags: 0
